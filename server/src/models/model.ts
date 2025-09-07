@@ -16,6 +16,9 @@ const Users = sequelize.define<Model<IUsers>>('users', {
         type: DataTypes.STRING(150),
         allowNull: true,
     }
+}, {
+    tableName: 'users',
+    timestamps: false  
 })
 
 const Files = sequelize.define<Model<IFiles>>('files', {
@@ -32,6 +35,9 @@ const Files = sequelize.define<Model<IFiles>>('files', {
         type: DataTypes.STRING(150),
         allowNull: true,
     }
+}, {
+    tableName: 'files',
+    timestamps: false  
 })
 
 export default {
