@@ -1,27 +1,32 @@
-import sequelize from "../db.js";
-import { DataTypes, Model } from "sequelize";
-import { IUsers, IFiles } from './model.type.js'
+import sequelize from "../db.js"
+import { DataTypes, Model } from "sequelize"
+import { UserInstance, FilesInstance } from './model.type.js'       
 
-const Users = sequelize.define<Model<IUsers>>('users', {
+const Users = sequelize.define<UserInstance>('users', {
     id:{
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+        allowNull: false
     },
     name:{
         type: DataTypes.STRING(100),
-        allowNull: true,
+        allowNull: false,
     },
     email:{
         type: DataTypes.STRING(150),
-        allowNull: true,
+        allowNull: false,
+    },
+    password:{
+        type: DataTypes.STRING(150),
+        allowNull: false, 
     }
 }, {
     tableName: 'users',
-    timestamps: false  
+    timestamps: false,
 })
 
-const Files = sequelize.define<Model<IFiles>>('files', {
+const Files = sequelize.define<FilesInstance>('files', {
     id:{
         type: DataTypes.INTEGER,
         primaryKey: true,

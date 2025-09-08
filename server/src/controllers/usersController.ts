@@ -1,48 +1,95 @@
-import { Request, Response } from 'express';
-import model from '../models/model.js'; 
-import { IUsers } from '../models/model.type.js'
-
-interface UserRequest extends Request {
-    body: IUsers,
-    params: {
-        id: string
-    }
-}
+import { Response } from 'express';
+import model from '../models/model.js'
+import { hashPassword, comparePassword } from '../utils/password.js'
+import jwt from 'jsonwebtoken';
+import { AuthRequest } from '@/middleware/auth.type.js';
+import { IUserAuthRequest, IUserDeleteRequest, IUserLoginResponse, IUserResponse } from './users.type.js';
 
 class UsersContollre {
-    async receipt(req: Request, res: Response){
+    async registr(req: IUserAuthRequest, res: Response<IUserLoginResponse | { message: string }>){
         try{
-            const date = await model.Users.findAll()
-            return res.json(date)
+            const { name, email, password } = req.body
+            if(!name || !email || !password) return res.json({message: 'name, email и password обязательны для заполнения'})
+            
+            const exist = await model.Users.findOne({where: { email: email }})
+            if(exist) return res.json({ message: 'user с таким email уже существует' })
+            
+            const hashedPassword = await hashPassword(password)
+            const user = await model.Users.create({ name, email, password: hashedPassword }) 
+
+            if (!user.id || !user.email || !user.name) return res.json({ message: 'ошибка создания пользователя' })
+
+            const token = jwt.sign(
+                { id: user.id, email: user.email },
+                process.env.JWT_SECRET || 'secret-key',
+                { expiresIn: '24h' }
+            )
+            return res.json({token,
+                user: {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email
+                }
+            })
         } catch(e){
-            console.error('ошибка получения users', e)
+            console.error('ошибка регистрации', e)
         }
     }
 
-    async adder(req: UserRequest, res: Response){
+    async login(req: IUserAuthRequest, res: Response<IUserLoginResponse | { message: string }>){
         try{
-            const { name, email } = req.body
-            if(!name || !email) return res.json({message: 'имя и email обязательны для заполнения'})
-                
-            const date = await model.Users.create({ name, email })
-            return res.json(date)
+            const { email, password } = req.body
+            if(!email || !password) return res.json({message: 'email и password обязательны'})
+            
+            const user = await model.Users.findOne({where: {email: email}}) 
+            if(!user) return res.json({message: 'user не найден'})
+            
+            const isValidPassword = await comparePassword(password, user.password)
+            if(!isValidPassword) return res.json({message: 'неверный пароль'}) 
+
+            const token = jwt.sign(
+                { id: user.id, email: user.email },
+                process.env.JWT_SECRET || 'secret-key',
+                { expiresIn: '24h' }
+            );
+
+            return res.json({
+                token,
+                message: 'вы успешно авторизовались'
+            });
         } catch(e){
-            console.error('ошибка создания users', e)
+            console.error('ошибка авторизации', e)
+        }
+    }
+    
+    async getProfile(req: AuthRequest, res: Response<IUserResponse | { message: string }>){
+        try{
+            if (!req.user)  return res.json({ message: 'требуется авторизация' })
+
+            const user = await model.Users.findByPk(req.user.id, {
+                attributes: { exclude: ['password'] }
+            })
+
+            if(!user) return res.json({ message: 'пользователь не найден' })
+
+            return res.json(user)
+        } catch(e){
+            console.error('ошибка получения user', e)
         }
     }
 
-    async delete(req: UserRequest, res: Response){
+    async delete(req: IUserDeleteRequest, res: Response){
         try{
             const { id } = req.params
-            if(!id) return res.json({message: 'id user не найден'})
+            if(!id) return res.json({message: 'user с id: ' + id +' не найден'})
             
-            const date = await model.Users.findOne({ where: { id: id }})
-            if(!date) return res.json({message: 'такого users не существует'})
+            const user = await model.Users.findOne({ where: { id: id }})
+            if(!user) return res.json({message: 'такого user не существует'})
             
             await model.Users.destroy({where: { id: id }})
             return res.json({message: 'user c id: ' + id + ' успешно удален'})
         } catch(e){
-            console.error('ошибка удаления users', e)
+            console.error('ошибка удаления user', e)
         }
     }
 }
