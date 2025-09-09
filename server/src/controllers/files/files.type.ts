@@ -1,6 +1,8 @@
 export interface IFilesResponse{
     id?: number,
-    name: string,
-    type: string,
-    userId: number
+    originalName: string,
+    extension: string,
+    size: number,
+    type: 'image' | 'document' | 'other',
+    url: string
 }

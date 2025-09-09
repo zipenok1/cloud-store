@@ -9,8 +9,11 @@ export interface IUsers{
 
 export interface IFiles{
     id?: number,
-    name: string,
-    type: string,
+    originalName: string,
+    extension: string,
+    size: number,
+    type: 'image' | 'document' | 'other',
+    path: string,
     userId: number
 }
 

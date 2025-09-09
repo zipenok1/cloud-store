@@ -1,5 +1,5 @@
 import sequelize from "../db.js"
-import { DataTypes, Model } from "sequelize"
+import { DataTypes } from "sequelize"
 import { UserInstance, FilesInstance } from './model.type.js'       
 
 const Users = sequelize.define<UserInstance>('users', {
@@ -27,20 +27,33 @@ const Users = sequelize.define<UserInstance>('users', {
 })
 
 const Files = sequelize.define<FilesInstance>('files', {
-    id:{
+    id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+        allowNull: false
     },
-    name:{
-        type: DataTypes.STRING(100),
-        allowNull: true,
+    originalName: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
     },
-    type:{
-        type: DataTypes.STRING(150),
-        allowNull: true,
+    extension: {
+        type: DataTypes.STRING(10),
+        allowNull: false,
     },
-    userId:{
+    size: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    type: {
+        type: DataTypes.ENUM('image', 'document', 'other'),
+        allowNull: false,
+    },
+    path: {
+        type: DataTypes.STRING(500),
+        allowNull: false,
+    },
+    userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
