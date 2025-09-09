@@ -1,6 +1,5 @@
 import 'dotenv/config'
 import express from 'express'
-import fileUpload from 'express-fileupload'
 import path from 'path'
 import cors from 'cors'
 import './models/model.js'
@@ -22,12 +21,12 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 app.use(express.static(path.resolve(__dirname, 'static')))
-app.use(configuredFileUpload);
-app.use(fileTypeMiddleware);
+app.use(configuredFileUpload)
+app.use(fileTypeMiddleware)
 
-app.use('/static/images', express.static(path.resolve(__dirname, 'static/images')));
-app.use('/static/documents', express.static(path.resolve(__dirname, 'static/documents')));
-app.use('/static/other', express.static(path.resolve(__dirname, 'static/other')));
+app.use('/static/images', express.static(path.resolve(__dirname, 'static/images')))
+app.use('/static/documents', express.static(path.resolve(__dirname, 'static/documents')))
+app.use('/static/other', express.static(path.resolve(__dirname, 'static/other')))
 
 app.use('/api', router)
 
