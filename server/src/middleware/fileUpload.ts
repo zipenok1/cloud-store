@@ -1,5 +1,7 @@
+import { Response, NextFunction } from 'express'
 import fileUpload from 'express-fileupload';
 import path from 'path';
+import { FileUploadRequest } from './file.type';
 
 export const configuredFileUpload = fileUpload({
     createParentPath: true,
@@ -11,12 +13,13 @@ export const configuredFileUpload = fileUpload({
     tempFileDir: '/tmp/'
 });
 
-export const fileTypeMiddleware = (req: any, res: any, next: any) => {
-    if (!req.files || Object.keys(req.files).length === 0) {
-        return next()
-    }
+export const fileTypeMiddleware = (req: FileUploadRequest, res: Response, next: NextFunction) => {
+    if (!req.files || Object.keys(req.files).length === 0) return next()
 
-    const file = req.files.file;
+    const file = req.files.file
+
+    if (Array.isArray(file)) return next(new Error('ожидался один файл, получен массив'))
+
     const extension = path.extname(file.name).toLowerCase()
     
     if (['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp'].includes(extension)) {
