@@ -39,11 +39,24 @@ const Files = sequelize.define<FilesInstance>('files', {
     type:{
         type: DataTypes.STRING(150),
         allowNull: true,
+    },
+    userId:{
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: Users,
+            key: 'id'
+        }
     }
 }, {
     tableName: 'files',
     timestamps: false  
 })
+
+
+Users.hasMany(Files, { foreignKey: 'userId', as: 'files' })
+Files.belongsTo(Users, { foreignKey: 'userId', as: 'user' })
+
 
 export default {
     Users,

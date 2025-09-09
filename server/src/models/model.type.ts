@@ -10,7 +10,8 @@ export interface IUsers{
 export interface IFiles{
     id?: number,
     name: string,
-    type: string
+    type: string,
+    userId: number
 }
 
 export interface UserInstance extends Model<IUsers>, IUsers {}

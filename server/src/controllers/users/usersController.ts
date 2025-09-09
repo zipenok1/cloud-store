@@ -1,8 +1,8 @@
 import { Response } from 'express';
-import model from '../models/model.js'
-import { hashPassword, comparePassword } from '../utils/password.js'
+import model from '../../models/model.js'
+import { hashPassword, comparePassword } from '../../utils/password.js'
 import jwt from 'jsonwebtoken';
-import { AuthRequest } from '@/middleware/auth.type.js';
+import { AuthRequest } from '../../middleware/auth.type.js';
 import { IUserAuthRequest, IUserDeleteRequest, IUserLoginResponse, IUserResponse } from './users.type.js';
 
 class UsersContollre {
