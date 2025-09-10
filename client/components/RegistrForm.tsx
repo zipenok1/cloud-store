@@ -3,16 +3,15 @@
 import React from 'react';
 import { setCookie } from 'nookies';
 import { Button, Form, Input } from 'antd';
-import { IloginForm } from '../api/type/auth.type';
+import { TregistrForm } from '../api/type/auth.type';
 
 import * as Api from '../api'
 
-export const LoginForm: React.FC = () => {
+export const RegistrForm: React.FC = () => {
 
-  const onSubmit = async (values: IloginForm) => {
+  const onSubmit = async (values: TregistrForm) => {
     try{
-      // Api.auth.login(values) и дт
-      const { token } = await Api.auth.login(values)
+      const { token } = await Api.auth.registr(values)
 
       setCookie(null, "_token", token, {
         path: '/'
@@ -21,7 +20,7 @@ export const LoginForm: React.FC = () => {
       location.href = '/'
 
     } catch(e){
-      console.warn('loginForm', e)
+      console.warn('registrForm', e)
     }
   }
 
@@ -32,6 +31,14 @@ export const LoginForm: React.FC = () => {
         labelCol={{ span: 8 }}
         onFinish={onSubmit}
       >
+        <Form.Item
+          label='имя'
+          name='name'
+          rules={[{ required: true, message: 'укажите имя' }]}
+        >
+          <Input />
+        </Form.Item>
+
         <Form.Item
           label='почта'
           name='email'
@@ -55,7 +62,7 @@ export const LoginForm: React.FC = () => {
           }}
         >
           <Button type='primary' htmlType='submit'>
-              Войти
+            Регистрация 
           </Button>
         </Form.Item>
       </Form>

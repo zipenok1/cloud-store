@@ -25,9 +25,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen`}>
         <Header/>
-        <div className="max-w-[1920px] w-4/5 mx-auto py-10 flex justify-center"> 
+        <div className="max-w-[1920px] w-4/5 mx-auto py-10 flex justify-center align-middle h-11/12 items-center-safe"> 
           {children}
         </div>
       </body>

@@ -9,22 +9,22 @@ class UsersContollre {
     async registr(req: IUserAuthRequest, res: Response<IUserLoginResponse | { message: string }>){
         try{
             const { name, email, password } = req.body
-            if(!name || !email || !password) return res.json({message: 'name, email и password обязательны для заполнения'})
+            if(!name || !email || !password) return res.status(401).json({message: 'name, email и password обязательны для заполнения'})
             
             const exist = await model.Users.findOne({where: { email: email }})
-            if(exist) return res.json({ message: 'user с таким email уже существует' })
+            if(exist) return res.status(401).json({ message: 'user с таким email уже существует' })
             
             const hashedPassword = await hashPassword(password)
             const user = await model.Users.create({ name, email, password: hashedPassword }) 
 
-            if (!user.id || !user.email || !user.name) return res.json({ message: 'ошибка создания пользователя' })
+            if (!user.id || !user.email || !user.name) return res.status(401).json({ message: 'ошибка создания пользователя' })
 
             const token = jwt.sign(
                 { id: user.id, email: user.email },
                 process.env.JWT_SECRET || 'secret-key',
                 { expiresIn: '24h' }
             )
-            return res.json({token,
+            return res.status(200).json({token,
                 user: {
                     id: user.id,
                     name: user.name,
@@ -39,13 +39,13 @@ class UsersContollre {
     async login(req: IUserAuthRequest, res: Response<IUserLoginResponse | { message: string }>){
         try{
             const { email, password } = req.body
-            if(!email || !password) return res.json({message: 'email и password обязательны'})
+            if(!email || !password) return res.status(401).json({message: 'email и password обязательны'})
             
             const user = await model.Users.findOne({where: {email: email}}) 
-            if(!user) return res.json({message: 'user не найден'})
+            if(!user) return res.status(401).json({message: 'user не найден'})
             
             const isValidPassword = await comparePassword(password, user.password)
-            if(!isValidPassword) return res.json({message: 'неверный пароль'}) 
+            if(!isValidPassword) return res.status(401).json({message: 'неверный пароль'}) 
 
             const token = jwt.sign(
                 { id: user.id, email: user.email },
@@ -53,7 +53,7 @@ class UsersContollre {
                 { expiresIn: '24h' }
             );
 
-            return res.json({
+            return res.status(200).json({
                 token,
                 message: 'вы успешно авторизовались'
             });
