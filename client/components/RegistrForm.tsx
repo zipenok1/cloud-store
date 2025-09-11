@@ -17,7 +17,7 @@ export const RegistrForm: React.FC = () => {
         path: '/'
       })
 
-      location.href = '/'
+      location.href = '/dashboard'
 
     } catch(e){
       console.warn('registrForm', e)

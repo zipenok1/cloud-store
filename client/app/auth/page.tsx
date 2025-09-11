@@ -1,9 +1,8 @@
 import { Tabs } from "antd";
-import { NextPage } from "next";
 import { LoginForm } from "../../components/LoginForm";
 import { RegistrForm } from "../../components/RegistrForm";
 
-const AuthPage: NextPage = () => {
+const AuthPage = () => {
     return(
         <main>
             <Tabs 

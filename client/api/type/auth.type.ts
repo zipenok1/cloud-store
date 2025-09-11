@@ -9,3 +9,9 @@ export interface IloginRes{
 
 export type TregistrForm = IloginForm & {name: string}
 export type TregistrRes = IloginRes
+
+export interface IUsers{
+    id?: number,
+    name: string,
+    email: string
+}
