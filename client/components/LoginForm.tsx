@@ -18,7 +18,7 @@ export const LoginForm: React.FC = () => {
         path: '/'
       })
 
-      location.href = '/dashboard'
+      location.href = '/dashboard/profile'
 
     } catch(e){
       console.warn('loginForm', e)

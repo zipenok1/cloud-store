@@ -1,7 +1,8 @@
+
 export default function Home() {
   return (
     <div>
-      <h1>Hello word</h1>
+      <h1 className="font-black text-3xl">Добро пожаловать</h1>
     </div>
   );
 }

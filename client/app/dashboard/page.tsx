@@ -4,15 +4,13 @@ import * as Api from '../../api';
 import DashboardClient from './DashboardClient'
 
 export default async function DashboardPage() {
-    const token = (await cookies()).get('_token')?.value;
+    const token = (await cookies()).get('_token')?.value
+    if(!token) redirect('/auth')
     
-    if(!token) redirect('/auth');
-    
-    try {
-        const userData = await Api.auth.profile(token)
-        console.log('User data:', userData)
-        return <DashboardClient userData={userData}/>
-    } catch (e) {
+    try{
+        
+        return <DashboardClient/>
+    } catch(e){
         redirect('/auth');
     }
 }

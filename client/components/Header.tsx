@@ -12,19 +12,20 @@ async function Header() {
             <div className='max-w-[1920px] w-4/5 mx-auto flex items-center justify-between'>
                 <Link href='/'>
                     <Image
-                        src='./cloudLogo.svg'
+                        src='/cloudLogo.svg'
                         alt='cloud logo'
                         width={60}
                         height={60}
+                        priority
                     />
                 </Link>
                 <nav className='flex gap-5 text-white'>
-                    {isAuthenticated 
-                    ? 
-                    (<Link href='/dashboard'>Панель</Link>) 
-                    : 
+                    {isAuthenticated ? 
+                    (<Link href='/dashboard'>Панель</Link>) : 
                     (<Link href='/'>Домой</Link>)}
-                    <Link href='/auth'>Авторизация</Link>
+                    {isAuthenticated ? 
+                    (<Link href='/dashboard/profile'>Профиль</Link>) :
+                    (<Link href='/auth'>Авторизация</Link>)}
                 </nav>
             </div>
         </header>
