@@ -2,9 +2,11 @@
 
 import { Button, Menu, MenuProps } from "antd"
 import { useRouter, usePathname } from "next/navigation"
+import { IDashboardClient } from "./DashboardClient.type"
+import Image from "next/image"
 
 
-const DashboardPage = () => {
+const DashboardPage = (filesData: IDashboardClient) => {
 
     const router = useRouter()
     const pathname = usePathname()
@@ -13,17 +15,14 @@ const DashboardPage = () => {
         {
             key: '/dashboard/files',
             label: 'Файлы',
-            onClick: () => router.push('/dashboard/files')
         },
         {
             key: '/dashboard/photo',
             label: 'Фотографии',
-            onClick: () => router.push('/dashboard/photo')
         },
         {
             key: '/dashboard/other',
             label: 'Другое',
-            onClick: () => router.push('/dashboard/other')
         }
     ]
 
@@ -40,11 +39,27 @@ const DashboardPage = () => {
                 />
             </div>
 
-            <div className="bg-neutral-100 w-full py-3 px-4 rounded-2xl">
-                <h1>Files</h1>
+            <div className="bg-neutral-100 w-full py-3 px-4 rounded-2xl flex gap-2.5 flex-wrap">
+                {filesData.filesData.map(el=>
+                    <div 
+                        className="bg-blue-400 px-4 py-4 rounded-2xl h-max"
+                        key={el.id}
+                    >   
+                        <Image
+                            src={`http://localhost:7000${el.url}`}
+                            alt={el.originalName}
+                            width={128}
+                            height={128}
+                            className="object-cover rounded mb-2"
+                        />
+                        <h1>{el.originalName}</h1>
+                        <p>{el.type}</p>
+                    </div>
+                )}
             </div>
         </div>
     )
 }
 
 export default DashboardPage
+

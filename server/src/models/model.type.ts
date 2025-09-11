@@ -12,7 +12,7 @@ export interface IFiles{
     originalName: string,
     extension: string,
     size: number,
-    type: 'image' | 'document' | 'other',
+    type: 'images' | 'document' | 'other',
     path: string,
     userId: number
 }

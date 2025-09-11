@@ -46,7 +46,7 @@ const Files = sequelize.define<FilesInstance>('files', {
         allowNull: false,
     },
     type: {
-        type: DataTypes.ENUM('image', 'document', 'other'),
+        type: DataTypes.ENUM('images', 'document', 'other'),
         allowNull: false,
     },
     path: {

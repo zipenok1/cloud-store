@@ -5,7 +5,6 @@ import cors from 'cors'
 import './models/model.js'
 import sequelize from './db.js'
 import router from './routers/index.js'
-import { __dirname } from './utils/paths.js'
 import fs from 'fs'
 import { configuredFileUpload, fileTypeMiddleware } from './middleware/fileUpload.js'
 
@@ -20,13 +19,13 @@ const app = express()
 
 app.use(cors())
 app.use(express.json())
-app.use(express.static(path.resolve(__dirname, 'static')))
+
+const staticPath = path.join(process.cwd(), 'static')
+console.log('Absolute static path:', staticPath)
+app.use('/static', express.static(staticPath))
+
 app.use(configuredFileUpload)
 app.use(fileTypeMiddleware)
-
-app.use('/static/images', express.static(path.resolve(__dirname, 'static/images')))
-app.use('/static/documents', express.static(path.resolve(__dirname, 'static/documents')))
-app.use('/static/other', express.static(path.resolve(__dirname, 'static/other')))
 
 app.use('/api', router)
 

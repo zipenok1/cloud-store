@@ -13,7 +13,7 @@ class FilesController{
             const { type } = req.query
 
             const whereClause: any = {userId: req.user.id}
-            if(type && ['image', 'document', 'other'].includes(type as string)){
+            if(type && ['images', 'document', 'other'].includes(type as string)){
                 whereClause.type = type
             }
 
@@ -24,7 +24,7 @@ class FilesController{
 
             const response = files.map(file => ({
                 ...file.toJSON(),
-                url: `/static/${file.type}s/${file.originalName}`
+                url: `/static/${file.type}/${file.originalName}`
             }))
 
             return res.json(response)
@@ -43,11 +43,11 @@ class FilesController{
             const extension = path.extname(file.name).toLowerCase()
             const fileName = file.name
             
-            let fileType: 'image' | 'document' | 'other'
+            let fileType: 'images' | 'document' | 'other'
             let savePath: string
 
             if (['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp'].includes(extension)) {
-                fileType = 'image'
+                fileType = 'images'
                 savePath = path.join('static', 'images', fileName)
             } else if (['.pdf', '.doc', '.docx', '.txt', '.xlsx', '.xls'].includes(extension)) {
                 fileType = 'document'
@@ -74,7 +74,7 @@ class FilesController{
                 extension: dbFile.extension,
                 type: dbFile.type,
                 size: dbFile.size,
-                url: `/static/${fileType}s/${fileName}` 
+                url: `/static/${fileType}/${fileName}` 
             });
 
         } catch (e) {
