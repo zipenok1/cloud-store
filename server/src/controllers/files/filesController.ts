@@ -51,7 +51,7 @@ class FilesController{
                 savePath = path.join('static', 'images', fileName)
             } else if (['.pdf', '.doc', '.docx', '.txt', '.xlsx', '.xls'].includes(extension)) {
                 fileType = 'document'
-                savePath = path.join('static', 'documents', fileName)
+                savePath = path.join('static', 'document', fileName)
             } else {
                 fileType = 'other'
                 savePath = path.join('static', 'other', fileName)

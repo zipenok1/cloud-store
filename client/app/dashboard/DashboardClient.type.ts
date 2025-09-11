@@ -1,9 +1,9 @@
 export interface IFilesClientRes{
-    id: number,
+    id?: number,
     originalName: string,
     extension?: string,
     size?: number,
-    type?: 'image' | 'document' | 'other',
+    type?: 'images' | 'document' | 'other',
     url?: string
   }
 

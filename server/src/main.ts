@@ -8,7 +8,7 @@ import router from './routers/index.js'
 import fs from 'fs'
 import { configuredFileUpload, fileTypeMiddleware } from './middleware/fileUpload.js'
 
-const folders = ['static/images', 'static/documents', 'static/other'];
+const folders = ['static/images', 'static/document', 'static/other'];
 folders.forEach(folder => {
     if (!fs.existsSync(folder)) {
         fs.mkdirSync(folder, { recursive: true });

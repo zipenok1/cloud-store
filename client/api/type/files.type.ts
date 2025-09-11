@@ -3,6 +3,6 @@ export interface IFilesRes{
     originalName: string,
     extension: string,
     size: number,
-    type: 'image' | 'document' | 'other',
+    type: 'images' | 'document' | 'other',
     url?: string
   }
