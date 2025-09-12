@@ -9,7 +9,7 @@ export default async function DashboardPage() {
     
     try{
         const filesData = await Api.files.getFiles(token)
-        return <DashboardClient filesData={filesData}/>
+        return <DashboardClient filesData={{ filesData }} token={token}/>
     } catch(e){
         redirect('/auth');
     }
