@@ -15,6 +15,17 @@ interface UploadButtonProps {
 export const UploadButton: React.FC<UploadButtonProps> = ({ token, onUploadSuccess }) => {
   const [uploading, setUploading] = useState(false)
 
+  const getFileExtension = (filename: string): string => {
+    return filename.toLowerCase().slice(
+      (Math.max(0, filename.lastIndexOf(".")) || Infinity)
+    )
+  }
+
+  const allowedExtensions = [
+    '.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp',
+    '.pdf', '.doc', '.docx', '.txt', '.xlsx', '.xls'
+  ]
+
   const props: UploadProps = {
     name: 'file',
     multiple: false,
@@ -23,27 +34,20 @@ export const UploadButton: React.FC<UploadButtonProps> = ({ token, onUploadSucce
     beforeUpload: (file) => {
       const isLt10M = file.size / 1024 / 1024 < 10
       if (!isLt10M) {
-        message.error('файл должен быть меньше 10mb')
+        message.error('файл должен быть меньше 10MB')
         return Upload.LIST_IGNORE
       }
 
-      const allowedTypes = [
-        'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/bmp',
-        'application/pdf', 'application/msword', 
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'text/plain',
-        'application/vnd.ms-excel',
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-      ]
-
-      if (!allowedTypes.includes(file.type)) {
-        message.error('недопустимый формат файла')
+      const extension = getFileExtension(file.name)
+      if (!allowedExtensions.includes(extension)) {
+        message.error('недопустимый формат файла. Разрешенные форматы: ' + 
+          allowedExtensions.join(', '))
         return Upload.LIST_IGNORE
       }
 
       return true
     },
-    customRequest: async ({ file, onSuccess, onError, onProgress }) => {
+    customRequest: async ({ file, onSuccess, onError }) => {
       setUploading(true)
       
       try {
@@ -73,7 +77,6 @@ export const UploadButton: React.FC<UploadButtonProps> = ({ token, onUploadSucce
     },
     onChange: (info) => {
       const { status } = info.file
-      
       if (status === 'done') {
         console.log('file uploaded successfully')
       } else if (status === 'error') {
@@ -96,7 +99,6 @@ export const UploadButton: React.FC<UploadButtonProps> = ({ token, onUploadSucce
           Нажмите или перетащите файл для загрузки
         </p>
       </Upload.Dragger>
-      
       {uploading && (
         <div className="mt-2 text-sm text-blue-500">
           Загрузка...
